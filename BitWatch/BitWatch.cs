@@ -11,10 +11,12 @@ namespace BitWatch
         private static Bittrex bit;
         private static string key = "7a8f51b3a2fa44afb8993c6dd0b50d08";    // dont hack plz
         private static string secret = "184cc8ccaba04a0f8c73a055d0353ee2"; // i dont want my bitz stolen thx
-        private static double btcvalue = 4000;
+        private static double btcvalue = 0;
         
         public static void Main(string[] args)
         {
+            Console.SetWindowSize(100, 25);
+            
             bit = new Bittrex(key, secret);
             
             bit.GetOpenOrders();
@@ -23,8 +25,8 @@ namespace BitWatch
             Console.CursorVisible = false;
             
             Console.Clear();
-            Console.WriteLine("BTC  : History                :         Balance :       BTC Value");
-            Console.WriteLine("-----------------------------------------------------------------");
+            Console.WriteLine("BTC  : History                :         Balance :       BTC Value : USD Value");
+            Console.WriteLine("-----------------------------------------------------------------------------");
             Console.SetCursorPosition(0, balances.result.Count+4);
             Console.WriteLine("Press <Q> to stop.");
             
@@ -88,7 +90,9 @@ namespace BitWatch
                     }
                     Console.ForegroundColor = ConsoleColor.Gray;
                 }
-                Console.WriteLine(" : {0,15:F10} : {1,15:F10}", b.Available, trades.result[0].Price * b.Balance);
+                var tradebal = trades.result[0].Price * b.Balance;
+                var usdval = Math.Round(btcvalue * tradebal, 2);
+                Console.WriteLine(" : {0,15:F10} : {1,15:F10} : {2,9}", b.Available, tradebal, usdval);
             }
             Console.WriteLine("Total BTC value: {0}", totalbits);
             Console.WriteLine("Total USD value: {0}", btcvalue*totalbits);
