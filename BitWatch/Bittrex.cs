@@ -47,6 +47,21 @@ namespace BitWatch
         public List<Trade> result { get; set; }
     }
     
+    /* BTC value */
+    public class Value
+    {
+        public double Bid { get; set; }
+        public double Ask { get; set; }
+        public double Last { get; set; }
+    }
+
+    public class BTCValue
+    {
+        public bool success { get; set; }
+        public string message { get; set; }
+        public Value result { get; set; }
+    }
+    
     /* Bittrex */
     public class Bittrex
     {
@@ -130,6 +145,22 @@ namespace BitWatch
             Trades trades = JsonConvert.DeserializeObject<Trades>(message);
             
             return trades;
+        }
+
+        public BTCValue GetBtcValue()
+        {
+            url = $"https://bittrex.com/api/v1.1/public/getticker?market=usdt-btc";
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+
+            HttpResponseMessage response = client.SendAsync(request).Result;
+            string message = response.Content.ReadAsStringAsync().Result;
+            BTCValue value = JsonConvert.DeserializeObject<BTCValue>(message);
+
+            return value;
         }
     }
     

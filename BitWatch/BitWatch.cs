@@ -8,10 +8,10 @@ namespace BitWatch
 {
     public class BitWatch
     {
-
         private static Bittrex bit;
-        private static string key = "7a8f51b3a2fa44afb8993c6dd0b50d08";
-        private static string secret = "184cc8ccaba04a0f8c73a055d0353ee2";
+        private static string key = "7a8f51b3a2fa44afb8993c6dd0b50d08";    // dont hack plz
+        private static string secret = "184cc8ccaba04a0f8c73a055d0353ee2"; // i dont want my bitz stolen thx
+        private static double btcvalue = 4000;
         
         public static void Main(string[] args)
         {
@@ -23,9 +23,9 @@ namespace BitWatch
             Console.CursorVisible = false;
             
             Console.Clear();
-            Console.WriteLine("BTC  : History                :         Balance");
-            Console.WriteLine("-----------------------------------------------");
-            Console.SetCursorPosition(0, balances.result.Count+3);
+            Console.WriteLine("BTC  : History                :         Balance :      BTC Value");
+            Console.WriteLine("----------------------------------------------------------------");
+            Console.SetCursorPosition(0, balances.result.Count+4);
             Console.WriteLine("Press <Q> to stop.");
             
             BackgroundWorker worker = new BackgroundWorker();
@@ -33,6 +33,7 @@ namespace BitWatch
             {
                 while (!Console.KeyAvailable)
                 {
+                    btcvalue = bit.GetBtcValue().result.Last;
                     balances = bit.GetBalances();
                     PrintBalances(balances);
                     Thread.Sleep(5000);
@@ -49,11 +50,18 @@ namespace BitWatch
         private static void PrintBalances(Balances balances)
         {
             Console.SetCursorPosition(0, 2);
+            double totalbits = 0;
             foreach (var b in balances.result)
             {
-                if (b.Currency == "BTC") continue;
+                if (b.Currency == "BTC")
+                {
+                    totalbits += b.Available;
+                    continue;
+                };
+                
                 Console.Write($"{b.Currency, -5}: ");
                 var trades = bit.GetTrades($"BTC-{b.Currency}");
+                totalbits += trades.result[0].Price * b.Balance;
 
                 var last = 0.0;
                 for (var i = 0; i < 22; i++)
@@ -77,8 +85,10 @@ namespace BitWatch
                     }
                     Console.ForegroundColor = ConsoleColor.Gray;
                 }
-                Console.WriteLine(" : {0,15:F10}", b.Available);
+                Console.WriteLine(" : {0,15:F10} : {1,15:F10}", b.Available, trades.result[0].Price * b.Balance);
             }
+            Console.WriteLine("Total BTC value: {0}", totalbits);
+            Console.WriteLine("Total USD value: {0}", btcvalue*totalbits);
         }
     }
 }
