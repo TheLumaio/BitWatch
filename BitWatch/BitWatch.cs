@@ -58,6 +58,12 @@ namespace BitWatch
                 if (b.Currency == "BTC")
                 {
                     totalbits += b.Available;
+                    var busdval = Math.Round(btcvalue * b.Available, 2);
+                    Console.Write("BTC  : ");
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.Write("----------------------");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.WriteLine(" : {0,15:F10} :             N/A : ${2,9:F2} : ${3,9:F2}", b.Available, btcvalue*b.Available, busdval, btcvalue);
                     continue;
                 };
 
