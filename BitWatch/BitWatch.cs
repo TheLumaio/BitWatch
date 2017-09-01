@@ -23,8 +23,8 @@ namespace BitWatch
             Console.CursorVisible = false;
             
             Console.Clear();
-            Console.WriteLine("BTC  : History                :         Balance :      BTC Value");
-            Console.WriteLine("----------------------------------------------------------------");
+            Console.WriteLine("BTC  : History                :         Balance :       BTC Value");
+            Console.WriteLine("-----------------------------------------------------------------");
             Console.SetCursorPosition(0, balances.result.Count+4);
             Console.WriteLine("Press <Q> to stop.");
             
@@ -58,6 +58,9 @@ namespace BitWatch
                     totalbits += b.Available;
                     continue;
                 };
+
+                if (b.Balance == 0)
+                    continue;
                 
                 Console.Write($"{b.Currency, -5}: ");
                 var trades = bit.GetTrades($"BTC-{b.Currency}");
