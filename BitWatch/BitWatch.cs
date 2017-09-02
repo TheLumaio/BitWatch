@@ -36,7 +36,7 @@ namespace BitWatch
 					btcvalue = bit.GetBtcValue().result.Last;
 					balances = bit.GetBalances();
 					PrintBalances(balances);
-					Thread.Sleep(5000);
+					Thread.Sleep(60*1000);
 				}
 			};
 			worker.RunWorkerAsync();
@@ -96,6 +96,7 @@ namespace BitWatch
 			}
 			Console.WriteLine("\nTotal BTC value: {0}", totalbits);
 			Console.WriteLine("Total USD value: ${0:F2}", Math.Round(btcvalue * totalbits, 2));
+			Console.WriteLine("\nUpdating every minute.\n{0}", DateTime.Now);
 		}
 	}
 }
