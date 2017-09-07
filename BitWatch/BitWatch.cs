@@ -23,8 +23,8 @@ namespace BitWatch
 			Console.CursorVisible = false;
 
 			Console.Clear();
-			Console.WriteLine("COIN : History                :         Balance :       BTC Value :  USD Value :    USD P/C");
-			Console.WriteLine("-------------------------------------------------------------------------------------------");
+			Console.WriteLine("COIN : History                :         Balance :       BTC Value :       BTC P/C :  USD Value :      USD P/C");
+			Console.WriteLine("-------------------------------------------------------------------------------------------------------------");
 			Console.SetCursorPosition(0, balances.result.Count + 4);
 			Console.WriteLine("Press <Q> to stop.");
 
@@ -61,7 +61,7 @@ namespace BitWatch
 					Console.ForegroundColor = ConsoleColor.DarkGray;
 					Console.Write("----------------------");
 					Console.ForegroundColor = ConsoleColor.Gray;
-					Console.WriteLine(" : {0,15:F10} :             N/A : ${1,9:F2} : ${2,9:F2}", b.Available, busdval, btcvalue);
+					Console.WriteLine(" : {0,15:F10} :             N/A :             N/A : ${1,9:F2} : ${2,9:F2}", b.Available, busdval, btcvalue);
 					continue;
 				}
 				
@@ -92,7 +92,8 @@ namespace BitWatch
 				var tradebal = trades.result[0].Price * b.Balance;
 				var usdval = Math.Round(btcvalue * tradebal, 2);
 				var usdpc = Math.Round(btcvalue * trades.result[0].Price, 2);
-				Console.WriteLine(" : {0,15:F10} : {1,15:F10} : ${2,9:F2} : ${3,9:F2}", b.Available, tradebal, usdval, usdpc);
+				var btcpc = trades.result[0].Price;
+				Console.WriteLine(" : {0,15:F10} : {2,15:F10} : {1,15:F10} : ${3,9:F2} : ${4,9:F2}", b.Available, btcpc, tradebal, usdval, usdpc);
 			}
 			Console.WriteLine("\nTotal BTC value: {0}", totalbits);
 			Console.WriteLine("Total USD value: ${0:F2}", Math.Round(btcvalue * totalbits, 2));
