@@ -34,7 +34,7 @@ namespace BitWatch
 			Console.CursorVisible = false;
 
 			Console.Clear();
-			Console.WriteLine("COIN : History                :         Balance :       BTC Value :       BTC P/C :  USD Value :      USD P/C");
+			Console.WriteLine("COIN : History                :         Balance :       BTC Value :         BTC P/C :  USD Value :    USD P/C");
 			Console.WriteLine("-------------------------------------------------------------------------------------------------------------");
 			Console.SetCursorPosition(0, balances.result.Count + 4);
 			Console.WriteLine("Press <Q> to stop.");
