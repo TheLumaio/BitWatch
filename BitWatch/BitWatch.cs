@@ -11,9 +11,20 @@ namespace BitWatch
 		private static readonly string secret = "184cc8ccaba04a0f8c73a055d0353ee2"; // i dont want my bitz stolen thx
 		private static double btcvalue = 0;
 
+		private static ConsoleColor[] colors = new ConsoleColor[7] {
+			ConsoleColor.Red,
+			ConsoleColor.DarkYellow,
+			ConsoleColor.Yellow,
+			ConsoleColor.Green,
+			ConsoleColor.Blue,
+			ConsoleColor.Cyan,
+			ConsoleColor.Magenta
+		};
+		
+
 		public static void Main(string[] args)
 		{
-			Console.SetWindowSize(100, 25);
+			Console.SetWindowSize(125, 25);
 
 			bit = new Bittrex(key, secret);
 
@@ -51,6 +62,7 @@ namespace BitWatch
 		{
 			Console.SetCursorPosition(0, 2);
 			double totalbits = 0;
+			int num = 0;
 			foreach (var b in balances.result)
 			{
 				if (b.Currency == "BTC")
@@ -69,6 +81,7 @@ namespace BitWatch
 				if ((int)b.Balance == 0)
 					continue;
 
+				Console.ForegroundColor = colors[num % 7];
 				Console.Write($"{b.Currency,-5}: ");
 				var trades = bit.GetTrades($"BTC-{b.Currency}");
 				totalbits += trades.result[0].Price * b.Balance;
@@ -93,8 +106,12 @@ namespace BitWatch
 				var usdval = Math.Round(btcvalue * tradebal, 2);
 				var usdpc = Math.Round(btcvalue * trades.result[0].Price, 2);
 				var btcpc = trades.result[0].Price;
+				Console.ForegroundColor = colors[num % 7];
 				Console.WriteLine(" : {0,15:F10} : {2,15:F10} : {1,15:F10} : ${3,9:F2} : ${4,9:F2}", b.Available, btcpc, tradebal, usdval, usdpc);
+				
+				num++;
 			}
+			Console.ForegroundColor = ConsoleColor.Gray;
 			Console.WriteLine("\nTotal BTC value: {0}", totalbits);
 			Console.WriteLine("Total USD value: ${0:F2}", Math.Round(btcvalue * totalbits, 2));
 			Console.WriteLine("\nUpdating every minute.\n{0}", DateTime.Now);
